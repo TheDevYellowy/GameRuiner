@@ -24,7 +24,7 @@ const createLoginWindow = () => {
 const createMainWindow = () => {
     const mainWindow = new BrowserWindow({
         width: 450,
-        height: 80,
+        height: 100,
         autoHideMenuBar: true,
         webPreferences: {
             nodeIntegration: true,
