@@ -3,11 +3,11 @@ const { WebSocket } = require('ws');
 let loginWindow;
 
 const user = {};
-var ws = new WebSocket(`ws://10.162.195.95:2048`);
+var ws;
 
 const createLoginWindow = () => {
     loginWindow = new BrowserWindow({
-        width: 300,
+        width: 465,
         height: 80,
         autoHideMenuBar: true,
         webPreferences: {
@@ -54,9 +54,11 @@ ipcMain.on('message', async (event, args) => {
     switch (uevent) {
         case 'createUser':
             user.username = args[1];
-            if(ws.readyState !== ws.OPEN) return;
-            ws.send(JSON.stringify({ op: 0, d: { user: user } }));
-            createMainWindow();
+            ws = new WebSocket(`ws://${args[2]}:2048`);
+            ws.once('open', ()=> {
+                ws.send(JSON.stringify({ op: 0, d: { user: user } }));
+                createMainWindow();
+            });
             break;
         case 'sendCommand':
             let key = args[1];
@@ -65,6 +67,6 @@ ipcMain.on('message', async (event, args) => {
     }
 });
 
-ws.on('close', () => {
+ws?.on('close', () => {
     ws.send(JSON.stringify({ op: 2, d: { user: user } }));
 });

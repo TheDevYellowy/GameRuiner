@@ -2,10 +2,10 @@ var ipcRenderer = require('electron').ipcRenderer;
 
 function login() {
     let name = document.getElementById("name").value;
-    // let ip = document.getElementById("ip").value;
+    let ip = document.getElementById("ip").value;
     if(name == null) return;
 
-    ipcRenderer.send('message', ['createUser', name]);
+    ipcRenderer.send('message', ['createUser', name, ip]);
 }
 
 let button = document.getElementById('login');
